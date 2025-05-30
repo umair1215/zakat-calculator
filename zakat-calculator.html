@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zakat Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to top, #f5f7fa, #c3cfe2);
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #006400;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      background: #e6ffe6;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .slideshow {
+      font-style: italic;
+      margin: 20px 0;
+      color: #444;
+      text-align: center;
+    }
+    details {
+      margin-top: 15px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .faq, .learn {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Zakat Calculator</h1>
+    <div class="slideshow" id="slideshow"></div>
+    <select id="currency">
+      <option value="">Select Currency</option>
+      <option value="₹">INR (₹)</option>
+      <option value="$">USD ($)</option>
+      <option value="£">GBP (£)</option>
+      <option value="€">EUR (€)</option>
+    </select>
+    <input type="number" id="cash" placeholder="Cash and Bank Balance">
+    <input type="number" id="goldGrams" placeholder="Gold (grams)">
+    <input type="number" id="goldPrice" placeholder="Gold Price per gram">
+    <input type="number" id="silverGrams" placeholder="Silver (grams)">
+    <input type="number" id="silverPrice" placeholder="Silver Price per gram">
+    <input type="number" id="business" placeholder="Business Inventory Value">
+    <input type="number" id="investments" placeholder="Investments (Stocks, Crypto, etc.)">
+    <input type="number" id="rentIncome" placeholder="Annual Rent Received from Properties">
+    <input type="number" id="propertyValue" placeholder="Commercial Property Value (non-residential)">
+    <input type="number" id="debts" placeholder="Debts/Liabilities (Rent, Loans, Bills)">
+    <input type="date" id="lastZakatDate">
+    <small><strong>Last Zakat Paid Date:</strong> Enter the date when you last paid Zakat. We'll calculate the next due date based on the lunar calendar (354 days).</small>
+    <button onclick="calculateZakat()">Calculate Zakat</button>
+    <div class="result" id="result"></div>
+    <footer>Made by Umair Khan 🇮🇳 — <a href="https://instagram.com/umair_1215" target="_blank">Instagram</a></footer>
+  </div>
+
+  <script>
+    const slideshowQuotes = [
+      ""Take from their wealth a charity by which you purify them." – Quran 9:103",
+      ""The upper hand is better than the lower hand." – Prophet Muhammad ﷺ",
+      ""Zakat is a means of purification and increase."",
+      ""Wealth does not decrease by giving in charity." – Hadith"
+    ];
+
+    let quoteIndex = 0;
+    function showSlideshow() {
+      const slideshow = document.getElementById('slideshow');
+      slideshow.textContent = slideshowQuotes[quoteIndex];
+      quoteIndex = (quoteIndex + 1) % slideshowQuotes.length;
+    }
+    setInterval(showSlideshow, 4000);
+    showSlideshow();
+
+    function calculateZakat() {
+      const currency = document.getElementById('currency').value || '';
+      const cash = parseFloat(document.getElementById('cash').value) || 0;
+      const goldGrams = parseFloat(document.getElementById('goldGrams').value) || 0;
+      const goldPrice = parseFloat(document.getElementById('goldPrice').value) || 0;
+      const silverGrams = parseFloat(document.getElementById('silverGrams').value) || 0;
+      const silverPrice = parseFloat(document.getElementById('silverPrice').value) || 0;
+      const business = parseFloat(document.getElementById('business').value) || 0;
+      const investments = parseFloat(document.getElementById('investments').value) || 0;
+      const rentIncome = parseFloat(document.getElementById('rentIncome').value) || 0;
+      const propertyValue = parseFloat(document.getElementById('propertyValue').value) || 0;
+      const debts = parseFloat(document.getElementById('debts').value) || 0;
+
+      const goldValue = goldGrams * goldPrice;
+      const silverValue = silverGrams * silverPrice;
+
+      const totalAssets = cash + goldValue + silverValue + business + investments + rentIncome + propertyValue;
+      const zakatableAmount = totalAssets - debts;
+      const zakat = zakatableAmount * 0.025;
+
+      const nisabGold = goldPrice * 85;
+      const nisabSilver = silverPrice * 595;
+      const eligible = zakatableAmount >= Math.min(nisabGold, nisabSilver);
+
+      const lastZakatDate = new Date(document.getElementById('lastZakatDate').value);
+      const nextZakatDate = new Date(lastZakatDate);
+      nextZakatDate.setDate(nextZakatDate.getDate() + 354);
+
+      let message = `<strong>Zakatable Wealth:</strong> ${currency}${zakatableAmount.toFixed(2)}<br>`;
+      message += `<strong>Zakat Due (2.5%):</strong> ${currency}${zakat.toFixed(2)}<br>`;
+      message += `<strong>Eligibility:</strong> ${eligible ? 'Yes, you must pay Zakat' : 'No, you are below Nisab'}<br>`;
+      if (document.getElementById('lastZakatDate').value) {
+        message += `<strong>Next Zakat Date (Lunar Year):</strong> ${nextZakatDate.toDateString()}`;
+      }
+
+      document.getElementById('result').innerHTML = message;
+    }
+  </script>
+</body>
+</html>
