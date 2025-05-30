@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,13 +25,19 @@
       text-align: center;
       color: #006400;
     }
-    input, select {
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+    select, input[type=number], input[type=date] {
       width: 100%;
       padding: 12px;
-      margin: 10px 0;
+      margin: 10px 0 15px 0;
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 16px;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -56,6 +63,7 @@
       margin: 20px 0;
       color: #444;
       text-align: center;
+      min-height: 40px;
     }
     details {
       margin-top: 15px;
@@ -74,8 +82,17 @@
     }
     footer {
       text-align: center;
-      margin-top: 20px;
+      margin: 30px 0 50px;
       font-size: 14px;
+      color: #555;
+    }
+    footer a {
+      color: #006400;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -83,36 +100,69 @@
   <div class="container">
     <h1>Zakat Calculator</h1>
     <div class="slideshow" id="slideshow"></div>
+    <label for="currency">Choose your currency:</label>
     <select id="currency">
-      <option value="">Select Currency</option>
-      <option value="₹">INR (₹)</option>
-      <option value="$">USD ($)</option>
-      <option value="£">GBP (£)</option>
-      <option value="€">EUR (€)</option>
+      <option value="₹" selected>Indian Rupee (₹)</option>
+      <option value="$">US Dollar ($)</option>
+      <option value="£">British Pound (£)</option>
+      <option value="€">Euro (€)</option>
+      <option value="₣">Swiss Franc (₣)</option>
+      <option value="¥">Japanese Yen (¥)</option>
+      <option value="₺">Turkish Lira (₺)</option>
+      <option value="₦">Nigerian Naira (₦)</option>
+      <option value="AED">UAE Dirham (د.إ)</option>
+      <option value="MYR">Malaysian Ringgit (RM)</option>
+      <option value="PKR">Pakistani Rupee (₨)</option>
+      <option value="SAR">Saudi Riyal (ر.س)</option>
+      <option value="EGP">Egyptian Pound (ج.م)</option>
+      <option value="BDT">Bangladeshi Taka (৳)</option>
     </select>
-    <input type="number" id="cash" placeholder="Cash and Bank Balance">
-    <input type="number" id="goldGrams" placeholder="Gold (grams)">
-    <input type="number" id="goldPrice" placeholder="Gold Price per gram">
-    <input type="number" id="silverGrams" placeholder="Silver (grams)">
-    <input type="number" id="silverPrice" placeholder="Silver Price per gram">
-    <input type="number" id="business" placeholder="Business Inventory Value">
-    <input type="number" id="investments" placeholder="Investments (Stocks, Crypto, etc.)">
-    <input type="number" id="rentIncome" placeholder="Annual Rent Received from Properties">
-    <input type="number" id="propertyValue" placeholder="Commercial Property Value (non-residential)">
-    <input type="number" id="debts" placeholder="Debts/Liabilities (Rent, Loans, Bills)">
-    <input type="date" id="lastZakatDate">
-    <small><strong>Last Zakat Paid Date:</strong> Enter the date when you last paid Zakat. We'll calculate the next due date based on the lunar calendar (354 days).</small>
+
+    <input type="number" id="cash" placeholder="Cash and Bank Balance" />
+    <input type="number" id="goldGrams" placeholder="Gold (grams)" />
+    <input type="number" id="goldPrice" placeholder="Gold Price per gram" />
+    <input type="number" id="silverGrams" placeholder="Silver (grams)" />
+    <input type="number" id="silverPrice" placeholder="Silver Price per gram" />
+    <input type="number" id="business" placeholder="Business Inventory Value" />
+    <input type="number" id="investments" placeholder="Investments (Stocks, Crypto, etc.)" />
+    <input type="number" id="rentIncome" placeholder="Annual Rent Received from Properties" />
+    <input type="number" id="propertyValue" placeholder="Commercial Property Value (non-residential)" />
+    <input type="number" id="debts" placeholder="Debts/Liabilities (Rent, Loans, Bills)" />
+    
+    <label for="lastZakatDate">Last Zakat Paid Date:</label>
+    <input type="date" id="lastZakatDate" />
+    <small>Enter the date when you last paid Zakat. We'll calculate the next due date based on the lunar calendar (354 days).</small>
+
     <button onclick="calculateZakat()">Calculate Zakat</button>
     <div class="result" id="result"></div>
-    <footer>Made by Umair Khan 🇮🇳 — <a href="https://instagram.com/umair_1215" target="_blank">Instagram</a></footer>
   </div>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details><summary>What is Nisab?</summary><p>Nisab is the minimum amount of wealth a Muslim must possess before they become eligible to pay Zakat. It is equivalent to 85 grams of gold or 595 grams of silver.</p></details>
+    <details><summary>Do I have to pay Zakat on rental income?</summary><p>Yes, rental income is part of your zakatable wealth. Add it in the "Annual Rent Received" field.</p></details>
+    <details><summary>Should I deduct my debts?</summary><p>Yes, any immediate or due debts can be deducted before calculating your zakatable amount.</p></details>
+    <details><summary>Do I pay Zakat on properties?</summary><p>If a property is bought for investment or resale, it is zakatable. If it's for personal use, it is not.</p></details>
+    <details><summary>Is Zakat due on gold jewelry?</summary><p>Yes, if it exceeds the Nisab threshold. Opinions may vary by school of thought.</p></details>
+  </div>
+
+  <div class="learn">
+    <h2>Learn About Zakat</h2>
+    <p>Zakat is the third pillar of Islam and a form of purification and growth. Allah commands: <em>"Take from their wealth a charity by which you purify them."</em> (Quran 9:103)</p>
+    <p>It is a duty upon every eligible Muslim to give 2.5% of their zakatable assets once every lunar year.</p>
+    <p>Always consult a scholar for special cases. For more, read <a href="https://sunnah.com/" target="_blank">authentic Hadith</a> and <a href="https://quran.com" target="_blank">Quran references</a>.</p>
+  </div>
+
+  <footer>
+    Made by Umair Khan 🇮🇳 — <a href="https://instagram.com/umair_1215" target="_blank" rel="noopener noreferrer">Instagram</a>
+  </footer>
 
   <script>
     const slideshowQuotes = [
-      ""Take from their wealth a charity by which you purify them." – Quran 9:103",
-      ""The upper hand is better than the lower hand." – Prophet Muhammad ﷺ",
-      ""Zakat is a means of purification and increase."",
-      ""Wealth does not decrease by giving in charity." – Hadith"
+      "\"Take from their wealth a charity by which you purify them.\" – Quran 9:103",
+      "\"The upper hand is better than the lower hand.\" – Prophet Muhammad ﷺ",
+      "\"Zakat is a means of purification and increase.\"",
+      "\"Wealth does not decrease by giving in charity.\" – Hadith"
     ];
 
     let quoteIndex = 0;
@@ -125,7 +175,8 @@
     showSlideshow();
 
     function calculateZakat() {
-      const currency = document.getElementById('currency').value || '';
+      const currency = document.getElementById('currency').value;
+
       const cash = parseFloat(document.getElementById('cash').value) || 0;
       const goldGrams = parseFloat(document.getElementById('goldGrams').value) || 0;
       const goldPrice = parseFloat(document.getElementById('goldPrice').value) || 0;
@@ -144,19 +195,24 @@
       const zakatableAmount = totalAssets - debts;
       const zakat = zakatableAmount * 0.025;
 
+      // Correct Nisab values
       const nisabGold = goldPrice * 85;
       const nisabSilver = silverPrice * 595;
       const eligible = zakatableAmount >= Math.min(nisabGold, nisabSilver);
 
-      const lastZakatDate = new Date(document.getElementById('lastZakatDate').value);
-      const nextZakatDate = new Date(lastZakatDate);
-      nextZakatDate.setDate(nextZakatDate.getDate() + 354);
+      const lastZakatDateValue = document.getElementById('lastZakatDate').value;
+      let nextZakatDate = null;
+      if (lastZakatDateValue) {
+        const lastZakatDate = new Date(lastZakatDateValue);
+        nextZakatDate = new Date(lastZakatDate);
+        nextZakatDate.setDate(nextZakatDate.getDate() + 354);
+      }
 
       let message = `<strong>Zakatable Wealth:</strong> ${currency}${zakatableAmount.toFixed(2)}<br>`;
       message += `<strong>Zakat Due (2.5%):</strong> ${currency}${zakat.toFixed(2)}<br>`;
       message += `<strong>Eligibility:</strong> ${eligible ? 'Yes, you must pay Zakat' : 'No, you are below Nisab'}<br>`;
-      if (document.getElementById('lastZakatDate').value) {
-        message += `<strong>Next Zakat Date (Lunar Year):</strong> ${nextZakatDate.toDateString()}`;
+      if (nextZakatDate) {
+        message += `<strong>Next Zakat Date (approx.):</strong> ${nextZakatDate.toISOString().slice(0,10)}`;
       }
 
       document.getElementById('result').innerHTML = message;
@@ -164,3 +220,4 @@
   </script>
 </body>
 </html>
+
